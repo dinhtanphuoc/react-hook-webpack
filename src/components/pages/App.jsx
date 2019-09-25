@@ -1,12 +1,13 @@
 import React from 'react';
 import logo from '../../logo.svg';
+import { Button } from 'antd';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
+        <p className="primary-color">
           Edit <code>src/App.js</code> and save to reload. aaaaa  cccc
         </p>
         <a
@@ -17,6 +18,7 @@ function App() {
         >
           Learn React
         </a>
+        <Button type="primary">primary</Button>
       </header>
     </div>
   );

@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: path.join(__dirname, "src", "index.js"),
+  entry: ["@babel/polyfill", path.join(__dirname, "src", "index.js")],
   output: {
     path: path.join(__dirname, "build"),
     filename: "bundle.js",
@@ -15,16 +15,48 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: "babel-loader",
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: [
+              "@babel/plugin-proposal-class-properties",
+              ["import", { libraryName: "antd", libraryDirectory: "es", style: true }]
+            ]
+          }
         }
       },
       {
-        test: /\.(css|scss)$/,
+        test: /\.(css|scss|less)$/,
         use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader",
-          "postcss-loader",
-          "sass-loader"
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          {
+            loader: "css-loader"
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: [
+                require('autoprefixer')
+              ]
+            }
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              implementation: require("sass")
+            }
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              modifyVars: {
+                'hack': `true; @import '${path.join(__dirname, "src", "antd.less")}';`
+              },
+              javascriptEnabled: true,
+            },
+          }
         ]
       },
       {
